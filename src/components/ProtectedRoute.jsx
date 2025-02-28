@@ -1,15 +1,15 @@
-import { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
-import { AuthContext } from './AuthContext'; // Adjust the import path as necessary
 import SideBar from './sidebar/SideBar';
+import { useSelector } from "react-redux";
 
 
 // eslint-disable-next-line react/prop-types
 const ProtectedRoute = ({ children }) => {
-    const { token, loading } = useContext(AuthContext);
-    console.log("token", token);
+  const user = useSelector((state) => state?.user);
+  const { userAuth, userLoading } = user;
+  const token =  userAuth?.token?.access
     
-    if (loading) {
+    if (userLoading) {
           return null;
     }
 

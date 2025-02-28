@@ -1,35 +1,38 @@
-import { useState, useContext } from "react";
-import axios from "axios";
-import { AuthContext } from "./AuthContext";
+import { useEffect } from "react";
+import { useState } from "react";
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from "react-router-dom";
+import { loginUserAction } from "../redux/slices/user/userSlice";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState(null);
-  const { setToken } = useContext(AuthContext);
+
   const navigate = useNavigate();
+  //dispacth
+  const dispacth = useDispatch();
+  //get data from store
+  const user = useSelector(state => state?.user)
+  const { error, userAuth } = user
+  console.log('userAuth: ', userAuth);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const values = {
+      email,
+      password,
+    }
     try {
-      const response = await axios.post("http://localhost:8000/login/user/", {
-        email,
-        password,
-      });
-      setToken(response.data.token);
-      localStorage.setItem("token", response.data.token);
+      dispacth(loginUserAction(values));
       navigate("/dashboard");
     } catch (error) {
       console.error("Authentication failed:", error.response.data.message);
-      setToken(null);
-      localStorage.removeItem("token");
-      if (error.response && error.response.data) {
-        setErrorMessage(error.response.data.message);
-      } else {
-        setErrorMessage("An unexpected error occurred. Please try again.");
-      }
     }
   };
+
+  useEffect(() => {
+    if (userAuth) { navigate("/dashboard") }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userAuth])
 
   return (
     <div>
@@ -91,8 +94,8 @@ const LoginForm = () => {
                   Sign in
                 </button>
                 <div className="pt-2 text-lg">
-                  {errorMessage && (
-                    <div style={{ color: "red" }}>{errorMessage}</div>
+                  {error && (
+                    <div style={{ color: "red" }}>{error}</div>
                   )}{" "}
                 </div>
               </form>

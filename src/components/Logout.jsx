@@ -1,21 +1,16 @@
-import { useContext, useEffect } from 'react';
-import { AuthContext } from './AuthContext';
-import { useNavigate } from 'react-router-dom'; 
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { logoutAction } from '../redux/slices/student/studentSlice';
 
-const Logout = () => {
-  const { setToken } = useContext(AuthContext); 
+const Logout = () => { 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    
-    setToken(null);
-    
-    // Remove the token from local storage
-    localStorage.removeItem('token');
-    
-    
-    navigate('/login');
-  }, []); 
+    dispatch(logoutAction())
+    navigate("/login")
+  }, [dispatch, navigate]); 
 
   return (
     <div>Logging out...</div>
