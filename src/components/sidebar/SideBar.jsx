@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { HomeOutlined,OrderedListOutlined } from '@ant-design/icons';
-
-
+import { Link } from "react-router-dom";
 const SideBar = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   const sideBarData = [
     { name: "Dashboard", path: "/dashboard", icon: <HomeOutlined />},
-    { name: "Student List", path: "/list", icon: <OrderedListOutlined /> },
+    { name: "Student List", path: "/student-list", icon: <OrderedListOutlined /> },
   ];
 
   const toggleSidebar = () => {
@@ -18,12 +17,12 @@ const SideBar = () => {
       {!isOpen && (
         <button
           onClick={toggleSidebar}
-          className="fixed top-0 left-0 z-50 p-2 m-2 rounded-md text-gray-600 hover:text-gray-800 focus:outline-none bg-white shadow-lg"
+          className="fixed top-0 left-0 z-50 p-2 m-2 text-gray-600 bg-white rounded-md shadow-lg hover:text-gray-800 focus:outline-none"
         >
           {/* Icon for the open button */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
+            className="w-6 h-6"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -42,19 +41,19 @@ const SideBar = () => {
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex flex-col w-96 h-screen px-4 py-8 bg-white overflow-y-auto border-r">
-          <div className="flex justify-between items-center mb-4">
+        <div className="flex flex-col h-screen px-4 py-8 overflow-y-auto bg-white border-r w-96">
+          <div className="flex items-center justify-between mb-4">
             <h2 className="text-3xl font-semibold text-center text-blue-800">
               Fees Management System
             </h2>
             <button
               onClick={toggleSidebar}
-              className="p-2 rounded-md text-gray-600 hover:text-gray-800 focus:outline-none"
+              className="p-2 text-gray-600 rounded-md hover:text-gray-800 focus:outline-none"
             >
               {/* Toggle Icon */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
+                className="w-6 h-6"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -73,14 +72,16 @@ const SideBar = () => {
             <ul>
               {sideBarData.map((data) => (
                 <li key={data.name} className="mb-4">
-                  <a
+                  <Link to={data?.path} onClick={toggleSidebar}>
+                  <div
                     className="flex items-center px-4 py-2 text-gray-700 bg-gray-100 rounded-md "
                     href="#"
                   >
                     {data.icon}
 
                     <span className="mx-4 font-medium">{data.name}</span>
-                  </a>
+                  </div>
+                </Link>
                 </li>
               ))}
             </ul>

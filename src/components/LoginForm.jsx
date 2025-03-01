@@ -13,6 +13,7 @@ const LoginForm = () => {
   const dispacth = useDispatch();
   //get data from store
   const user = useSelector(state => state?.user)
+  console.log('user: ', user);
   const { error, userAuth } = user
   console.log('userAuth: ', userAuth);
   const handleSubmit = async (e) => {

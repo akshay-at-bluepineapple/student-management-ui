@@ -33,6 +33,21 @@ export const loginUserAction = createAsyncThunk(
     }
 )
 
+//Logout action
+export const logoutAction = createAsyncThunk(
+  "/user/logout",
+  async (payload, { rejectWithValue }) => {
+    try {
+      localStorage.removeItem("userInfo");
+    } catch (error) {
+      if (!error?.response) {
+        throw error;
+      }
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+)
+
 //get user details from loacal storage and place it in store
 const userLoginFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : undefined;
 
@@ -62,7 +77,21 @@ const userSlices = createSlice({
 
         builder.addCase(resetUserLogin, (state) => {
             state.isLogin = true;
-          });
+        });
+
+        //logout
+        builder.addCase(logoutAction.pending, (state) => {
+            state.isLoading = false;
+        });
+        builder.addCase(logoutAction.fulfilled, (state) => {
+            state.userAuth = undefined;
+            state.isLoading = false;
+            state.error = undefined;
+        });
+        builder.addCase(logoutAction.rejected, (state, action) => {
+            state.error = action.payload?.message 
+            state.isLoading = false;
+        });
     }
 });
 

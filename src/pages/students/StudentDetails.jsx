@@ -75,50 +75,129 @@ const StudentDetail = () => {
 
   return (
     <>
-      <div className="max-w-5xl p-8 mx-auto my-10 bg-white rounded-lg shadow-lg md:p-6 sm:p-4">
+      <div className="max-w-full p-8 m-10 bg-white rounded-lg shadow-lg md:p-6 sm:p-4">
+        <h2 className="mb-6 text-2xl font-bold text-center">Student Info</h2>
+
         <div className="flex flex-col items-center pb-6 space-y-6 border-b md:flex-row md:space-y-0 md:space-x-6">
           <img
             className="w-32 h-32 rounded-full shadow-md"
             src="https://images.unsplash.com/photo-1457449940276-e8deed18bfff?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="Profile"
           />
-          <div className="text-center md:text-left">
-            <h2 className="text-3xl font-bold">{studentData.fullname}</h2>
-            <p className="text-gray-600">
-              Reg. No: {studentData.registrationNo}
-            </p>
-            <p className="text-gray-600">Age: {studentData.age}</p>
-            <p className="text-gray-600">Email: {studentData.email}</p>
-            <p className="text-gray-600">Phone: {studentData.phoneNumber}</p>
-            <p className="text-gray-600">Address: {studentData.address}</p>
-          </div>
-          <div className="flex flex-col w-full mt-4 space-y-2 md:flex-row md:space-x-4 md:space-y-0">
-            <button className="w-full px-4 py-2 text-white bg-blue-500 rounded shadow md:w-auto">
-              Update
-            </button>
-            <span
-              className={`w-full md:w-auto px-4 py-2 text-white text-lg text-center rounded-full ${
-                studentData.is_active ? "bg-green-500" : "bg-red-500"
-              }`}
-            >
-              {studentData.is_active ? "Active" : "Inactive"}
-            </span>
+          <div className="w-full overflow-x-auto">
+            <table className="w-full border-collapse border-gray-300">
+              <tbody>
+                <tr className="border-b">
+                  <td className="px-4 py-2 font-semibold bg-gray-100">
+                    Full Name:
+                  </td>
+                  <td className="px-4 py-2">{studentData.fullname}</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="px-4 py-2 font-semibold bg-gray-100">
+                    Reg. No:
+                  </td>
+                  <td className="px-4 py-2">{studentData.registrationNo}</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="px-4 py-2 font-semibold bg-gray-100">Age:</td>
+                  <td className="px-4 py-2">{studentData.age}</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="px-4 py-2 font-semibold bg-gray-100">
+                    Email:
+                  </td>
+                  <td className="px-4 py-2">{studentData.email}</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="px-4 py-2 font-semibold bg-gray-100">
+                    Phone:
+                  </td>
+                  <td className="px-4 py-2">{studentData.phoneNumber}</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="px-4 py-2 font-semibold bg-gray-100">
+                    Address:
+                  </td>
+                  <td className="px-4 py-2">{studentData.address}</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="px-4 py-2 font-semibold bg-gray-100">
+                    Status:
+                  </td>
+                  <td className="px-4 py-2">
+                    <span
+                      className={`w-full md:w-auto px-4 py-2 text-white text-lg text-center rounded-full ${
+                        studentData.is_active ? "bg-green-500" : "bg-red-500"
+                      }`}
+                    >
+                      {studentData.is_active ? "Active" : "Inactive"}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
         <div className="grid grid-cols-1 gap-6 mt-6 md:grid-cols-2">
           <div className="p-4 bg-gray-100 rounded-lg shadow">
             <h3 className="mb-2 text-lg font-semibold">Academic Details</h3>
-            <p>Course: {studentData.course}</p>
-            <p>Class Enrolled: {studentData.class_enrolled}</p>
-            <p>Academic Year: {studentData.academic_year}</p>
-            <p>Enrollment Date: {studentData.enrollment_date}</p>
+            <div className="w-full overflow-x-auto">
+              <table className="w-full border-collapse border-gray-300">
+                <tbody>
+                  <tr className="border-b">
+                    <td className="px-4 py-2 font-semibold bg-gray-100">
+                      Course:
+                    </td>
+                    <td className="px-4 py-2">{studentData.course}</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="px-4 py-2 font-semibold bg-gray-100">
+                      Class Enrolled:
+                    </td>
+                    <td className="px-4 py-2">{studentData.class_enrolled}</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="px-4 py-2 font-semibold bg-gray-100">
+                      Academic Year:
+                    </td>
+                    <td className="px-4 py-2">{studentData.academic_year}</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="px-4 py-2 font-semibold bg-gray-100">
+                      Enrollment Date:
+                    </td>
+                    <td className="px-4 py-2">{studentData.enrollment_date}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
           <div className="p-4 bg-gray-100 rounded-lg shadow">
             <h3 className="mb-2 text-lg font-semibold">Fee Details</h3>
-            <p>Total Fees: ${studentData.total_fees}</p>
-            <p>Fees Paid: ${studentData.total_fees_paid}</p>
-            <p>Pending Fees: ${studentData.pen_fees}</p>
+            <table className="w-full border-collapse border-gray-300">
+              <tbody>
+                <tr className="border-b">
+                  <td className="px-4 py-2 font-semibold bg-gray-100">
+                    Total Fees:
+                  </td>
+                  <td className="px-4 py-2">{studentData.total_fees}</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="px-4 py-2 font-semibold bg-gray-100">
+                    Total Fees Paid
+                  </td>
+                  <td className="px-4 py-2">{studentData.total_fees_paid}</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="px-4 py-2 font-semibold bg-gray-100">
+                    Pending Fees:
+                  </td>
+                  <td className="px-4 py-2">{studentData.pen_fees}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 

@@ -1,5 +1,8 @@
-import { createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, createAction} from "@reduxjs/toolkit";
 import axios from "axios";
+
+//Redirect action
+const resetStudentCreated = createAction("student/created/reset");
 
 export const fetchAllStudents = createAsyncThunk(
     "student/list",
@@ -18,6 +21,36 @@ export const fetchAllStudents = createAsyncThunk(
                 config
             );
             console.log('data: ', data);
+            return data;
+            
+        } catch (error) {
+            if (!error.response) {
+                throw error;
+            }
+            return rejectWithValue(error?.response?.data);
+        }
+    }
+)
+
+export const createNewStudent = createAsyncThunk(
+    "student/create",
+    async (formData,{rejectWithValue, getState, dispatch}) =>{
+        const user = getState()?.user;
+        const { userAuth } = user;
+        const config = {
+            headers:{
+                Authorization: `Bearer ${userAuth?.token?.access}`,
+            }
+        }
+        //http call
+        try {
+            const {data} = await axios.post(
+                "http://localhost:8000/students/",
+                formData,
+                config
+            );
+            //dispatch
+            dispatch(resetStudentCreated());
             return data;
             
         } catch (error) {
@@ -57,22 +90,6 @@ export const fetchStudentById = createAsyncThunk(
     }
 )
 
-//Logout action
-export const logoutAction = createAsyncThunk(
-  "/user/logout",
-  async (payload, { rejectWithValue }) => {
-    try {
-      localStorage.removeItem("userInfo");
-    } catch (error) {
-      if (!error?.response) {
-        throw error;
-      }
-      return rejectWithValue(error?.response?.data);
-    }
-  }
-)
-
-
 //----------------
 //Slices
 //----------------
@@ -85,6 +102,25 @@ const studentSlices = createSlice({
         error: null,
       },
       extraReducers: builder =>{
+        //create students
+        builder.addCase(createNewStudent.pending, (state) => {
+            state.isLoading = true;
+            state.error = undefined;
+        });
+        builder.addCase(resetStudentCreated, (state ) => {
+            state.isStudentCreated = true;
+        });
+        builder.addCase(createNewStudent.fulfilled, (state, action) =>{
+            state.isLoading = false;
+            state.studentCreated = action?.payload;
+            state.isStudentCreated = true;
+            state.error = undefined;
+        });
+        builder.addCase(createNewStudent.rejected, (state, action) =>{
+            state.isLoading = false;
+            state.error = action.payload?.message || "Failed to fetch students";
+        });
+
         //fetch all students
         builder.addCase(fetchAllStudents.pending, (state) => {
             state.isLoading = true;
@@ -115,19 +151,6 @@ const studentSlices = createSlice({
             state.error = action.payload?.message || "Failed to fetch students";
         });
 
-        //logout
-        builder.addCase(logoutAction.pending, (state) => {
-            state.isLoading = false;
-        });
-        builder.addCase(logoutAction.fulfilled, (state) => {
-            state.userAuth = undefined;
-            state.isLoading = false;
-            state.error = undefined;
-        });
-        builder.addCase(logoutAction.rejected, (state, action) => {
-            state.error = action.payload?.message 
-            state.isLoading = false;
-        });
     },
 });
 

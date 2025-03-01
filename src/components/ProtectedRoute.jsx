@@ -1,6 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import SideBar from './sidebar/SideBar';
 import { useSelector } from "react-redux";
+import Banner from './banner/Banner';
 
 
 // eslint-disable-next-line react/prop-types
@@ -21,6 +22,7 @@ const ProtectedRoute = ({ children }) => {
     return (
         <div>
           <SideBar />
+          <Banner />
           <div>{children}</div>
         </div>
       );
