@@ -1,12 +1,20 @@
 import React, { useState } from "react";
-import { HomeOutlined,OrderedListOutlined } from '@ant-design/icons';
+import {
+  HomeOutlined,
+  OrderedListOutlined,
+  LogoutOutlined,
+} from "@ant-design/icons";
 import { Link } from "react-router-dom";
 const SideBar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const sideBarData = [
-    { name: "Dashboard", path: "/dashboard", icon: <HomeOutlined />},
-    { name: "Student List", path: "/student-list", icon: <OrderedListOutlined /> },
+    { name: "Dashboard", path: "/dashboard", icon: <HomeOutlined /> },
+    {
+      name: "Student List",
+      path: "/student-list",
+      icon: <OrderedListOutlined />,
+    },
   ];
 
   const toggleSidebar = () => {
@@ -69,22 +77,34 @@ const SideBar = () => {
           </div>
 
           <aside>
-            <ul>
-              {sideBarData.map((data) => (
-                <li key={data.name} className="mb-4">
-                  <Link to={data?.path} onClick={toggleSidebar}>
-                  <div
-                    className="flex items-center px-4 py-2 text-gray-700 bg-gray-100 rounded-md "
-                    href="#"
-                  >
-                    {data.icon}
+            <div className="flex flex-col flex-grow">
+              <ul>
+                {sideBarData.map((data) => (
+                  <li key={data.name} className="mb-4">
+                    <Link to={data?.path} onClick={toggleSidebar}>
+                      <div
+                        className="flex items-center px-4 py-2 text-gray-700 bg-gray-100 rounded-md "
+                        href="#"
+                      >
+                        {data.icon}
 
-                    <span className="mx-4 font-medium">{data.name}</span>
+                        <span className="mx-4 font-medium">{data.name}</span>
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+
+              {/* Logout Button at Bottom */}
+              <div className="mt-auto">
+                <Link to="/logout" onClick={toggleSidebar}>
+                  <div className="flex items-center px-4 py-2 text-red-600 bg-gray-100 rounded-md hover:bg-gray-200">
+                    <LogoutOutlined />
+                    <span className="mx-4 font-medium">Logout</span>
                   </div>
                 </Link>
-                </li>
-              ))}
-            </ul>
+              </div>
+            </div>
           </aside>
         </div>
       </div>

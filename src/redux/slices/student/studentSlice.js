@@ -20,7 +20,6 @@ export const fetchAllStudents = createAsyncThunk(
                 "http://localhost:8000/students/",
                 config
             );
-            console.log('data: ', data);
             return data;
             
         } catch (error) {

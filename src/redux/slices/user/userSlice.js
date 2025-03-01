@@ -1,14 +1,9 @@
-import { createAsyncThunk, createSlice, createAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-
-//Redirect action
-// const resetUserRegister = createAction("user/register/reset");
-const resetUserLogin = createAction("user/login/reset");
-// const resetUserUpdated = createAction("user/update/reset");
 
 export const loginUserAction = createAsyncThunk(
     "user/login",
-    async (userData, {rejectWithValue, dispatch}) =>{
+    async (userData, {rejectWithValue }) =>{
         const config = {
             headers: {
               "Content-Type": "application/json",
@@ -22,7 +17,6 @@ export const loginUserAction = createAsyncThunk(
                 config
             )
             localStorage.setItem("userInfo", JSON.stringify(data));
-            dispatch(resetUserLogin()); // This ensures registration status is reset before the next registration attempt.
             return data;
         } catch (error) {
             if (!error?.response) {
@@ -36,9 +30,10 @@ export const loginUserAction = createAsyncThunk(
 //Logout action
 export const logoutAction = createAsyncThunk(
   "/user/logout",
-  async (payload, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
       localStorage.removeItem("userInfo");
+      return true;
     } catch (error) {
       if (!error?.response) {
         throw error;
@@ -49,7 +44,7 @@ export const logoutAction = createAsyncThunk(
 )
 
 //get user details from loacal storage and place it in store
-const userLoginFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : undefined;
+const userLoginFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null;
 
 //slice
 const userSlices = createSlice({
@@ -75,9 +70,6 @@ const userSlices = createSlice({
             state.error = action?.payload?.message;
         });
 
-        builder.addCase(resetUserLogin, (state) => {
-            state.isLogin = true;
-        });
 
         //logout
         builder.addCase(logoutAction.pending, (state) => {
