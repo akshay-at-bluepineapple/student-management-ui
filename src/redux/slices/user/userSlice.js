@@ -12,7 +12,7 @@ export const loginUserAction = createAsyncThunk(
 
         try {
             const {data} = await axios.post(
-                "http://localhost:8000/login/user/",
+                `${import.meta.env.VITE_BE_URL}/login/user/`,
                 userData,
                 config
             )

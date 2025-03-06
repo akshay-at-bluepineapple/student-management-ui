@@ -17,7 +17,7 @@ export const fetchAllStudents = createAsyncThunk(
         //http call
         try {
             const {data} = await axios.get(
-                "http://localhost:8000/students/",
+                `${import.meta.env.VITE_BE_URL}/students/`,
                 config
             );
             return data;
@@ -44,7 +44,7 @@ export const createNewStudent = createAsyncThunk(
         //http call
         try {
             const {data} = await axios.post(
-                "http://localhost:8000/students/",
+                `${import.meta.env.VITE_BE_URL}/students/`,
                 formData,
                 config
             );
@@ -74,7 +74,7 @@ export const fetchStudentById = createAsyncThunk(
         //http call
         try {
             const {data} = await axios.get(
-                `http://localhost:8000/students/${id}/`,
+                `${import.meta.env.VITE_BE_URL}/students/${id}/`,
                 config
             );
             console.log('data: ', data);
