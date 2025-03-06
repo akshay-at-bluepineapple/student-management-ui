@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import CryptoJS from "crypto-js";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchStudentById } from "../../redux/slices/student/studentSlice";
+import { fetchStudentById, insertStudentFeeRecord } from "../../redux/slices/student/studentSlice";
 import ReceiptModal from "../Recipt/ReceiptModal";
 import AddPaymentModal from "../Recipt/AddPaymentModal ";
 
@@ -36,10 +36,15 @@ const StudentDetail = () => {
 
   useEffect(() => {
     if (encryptedId) {
-      const studentId = decryptId(encryptedId);
-      dispatch(fetchStudentById(studentId));
+      fetchStudentDetails()
     }
-  }, [dispatch, encryptedId]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const fetchStudentDetails = () =>{
+    const studentId = decryptId(encryptedId);
+      dispatch(fetchStudentById(studentId));
+  }
 
   const studentDetail = useSelector((state) => state?.student);
   const { isLoading, studentData, error } = studentDetail;
@@ -54,13 +59,27 @@ const StudentDetail = () => {
     setReceiptData(payment);
   };
 
-  const handleSavePayment = () => {
-    console.log("Saving payment:", paymentData);
-    setShowModal(false);
+  const handleSavePayment = async () => {
+    const data = {
+      ...paymentData,
+      student: decryptId(encryptedId)
+    }
+    try {
+      const response = await dispatch(insertStudentFeeRecord(data)).unwrap();
+  
+      if (response) {
+        await dispatch(fetchStudentById(decryptId(encryptedId)));
+      }
+  
+      setShowModal(false);
+    } catch (error) {
+      console.error("Error inserting fee record:", error);
+    }
   };
 
   const handleDownloadReceipt = (studentId, paymentId ) => {
-    const apiUrl = `http://localhost:8000/generate-receipt/${studentId}/${paymentId}/`;
+    const apiUrl = `${import.meta.env.VITE_BE_URL}/generate-receipt/${studentId}/${paymentId}/`;
+
     // Create a hidden link element to trigger download
     const link = document.createElement("a");
     link.href = apiUrl;
@@ -70,9 +89,6 @@ const StudentDetail = () => {
     document.body.removeChild(link);
   };
 
-  if (!studentData)
-    return <p className="text-center text-red-500">Student not found.</p>;
-
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -80,6 +96,10 @@ const StudentDetail = () => {
       </div>
     );
   }
+  
+  if (!studentData)
+    return <p className="text-center text-red-500">Student not found.</p>;
+
 
   // **Error State**
   if (error) {
@@ -249,7 +269,7 @@ const StudentDetail = () => {
           >
             Add Fee
           </button>
-          <button className="w-full px-4 py-2 text-white bg-green-500 rounded shadow">
+          <button className="w-full px-4 py-2 text-white bg-green-500 rounded shadow" disabled={studentData.fee_payments.length === 0}>
             Download Receipt (Range)
           </button>
         </div>

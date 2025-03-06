@@ -15,6 +15,11 @@ const SideBar = () => {
       path: "/student-list",
       icon: <OrderedListOutlined />,
     },
+    {
+      name: "View & Update Class",
+      path: "/class",
+      icon: <OrderedListOutlined />,
+    },
   ];
 
   const toggleSidebar = () => {

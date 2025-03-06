@@ -48,8 +48,11 @@ const NewAdmission = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    console.log("form data", formData);
     for (let key in formData) {
-      if (!formData[key]) {
+      console.log("key", key);
+      console.log("form data", formData[key]);
+      if (!formData[key] && key !== "is_active") {
         alert("All fields are required!");
         return;
       }
@@ -160,7 +163,7 @@ const NewAdmission = () => {
               name="is_active"
               value="true"
               onChange={handleChange}
-              checked
+              checked={formData.is_active === true}
             />{" "}
             Yes
           </label>
@@ -170,6 +173,7 @@ const NewAdmission = () => {
               name="is_active"
               value="false"
               onChange={handleChange}
+              checked={formData.is_active === false}
             />{" "}
             No
           </label>
